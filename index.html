@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartQuenda - Enterprise Suite</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Barra lateral -->
+        <nav class="sidebar no-print tour-step-1">
+            <div class="logo-container">
+                <img src="logo.png" alt="SmartQuenda Logo" class="logo-img">
+            </div>
+            
+            <div class="ayuntamiento-selector">
+                <label class="selector-label">Administración Activa</label>
+                <div class="custom-select-wrapper">
+                    <select id="city-select" class="custom-select">
+                        <option value="santiago">Santiago de Compostela</option>
+                        <option value="coruna">A Coruña</option>
+                        <option value="vigo">Vigo</option>
+                        <option value="ourense">Ourense</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select-icon"></i>
+                </div>
+            </div>
+
+            <ul class="nav-links">
+                <li class="nav-item active" data-target="dashboard" id="nav-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Panel de Control</span>
+                </li>
+                <li class="nav-item tour-step-4" data-target="cuadrantes" id="nav-cuadrantes">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Planificador Maestro</span>
+                </li>
+                <li class="nav-item tour-step-5" data-target="alertas" id="nav-alertas">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Resolución IA</span>
+                    <span class="badge" id="alert-badge">3</span>
+                </li>
+                <li class="nav-item" data-target="agentes" id="nav-agentes">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Directorio de Efectivos</span>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar">DS</div>
+                    <div class="user-details">
+                        <span class="user-name">Diego Suárez</span>
+                        <span class="user-role">Súper Administrador</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="main-content">
+            <header class="topbar no-print">
+                <h1 id="page-title">Inicio</h1>
+                <div class="topbar-actions">
+                    <button class="btn btn-outline" style="border-color: transparent; color: var(--text-muted);" onclick="startTour()"><i class="fa-solid fa-circle-play"></i> Reiniciar Tour</button>
+                    <button class="btn btn-outline btn-lg" onclick="generateFormalReport()"><i class="fa-solid fa-file-pdf"></i> Informe Oficial</button>
+                    <button class="btn btn-secondary btn-lg" onclick="openModal('nueva-quenda-modal')"><i class="fa-solid fa-plus"></i> Nueva Quenda</button>
+                </div>
+            </header>
+
+            <div class="views-container">
+                <!-- Vista: Dashboard (Más Minimalista) -->
+                <div class="view active" id="view-dashboard">
+                    <div class="kpi-grid tour-step-2">
+                        <div class="kpi-card interactive-card" onclick="openModal('kpi-cobertura-modal')">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Cobertura Global</span>
+                                <i class="fa-solid fa-shield-check kpi-icon text-success"></i>
+                            </div>
+                            <div class="kpi-value" id="kpi-cobertura">98%</div>
+                            <div class="kpi-trend text-success"><i class="fa-solid fa-arrow-trend-up"></i> +2.1%</div>
+                            <div class="click-hint"><i class="fa-solid fa-magnifying-glass-chart"></i> Ver Informe</div>
+                        </div>
+                        <div class="kpi-card interactive-card alert-kpi" onclick="switchView('alertas')" id="dashboard-alert-card">
+                            <div class="kpi-header">
+                                <span class="kpi-title">Alertas Activas</span>
+                                <i class="fa-solid fa-triangle-exclamation kpi-icon text-danger"></i>
+                            </div>
+                            <div class="kpi-value text-danger" id="kpi-alertas">3</div>
+                            <div class="kpi-trend text-danger">Requiere Acción</div>
+                            <div class="click-hint"><i class="fa-solid fa-magnifying-glass-chart"></i> Resolver</div>
+                        </div>
+                    </div>
+
+                    <!-- Dos paneles muy limpios -->
+                    <div class="dashboard-widgets" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+                        
+                        <!-- Panel Izquierdo: Gráfica Predictiva Visual -->
+                        <div class="widget tour-step-3" style="display: flex; flex-direction: column;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                                <h2 class="widget-title" style="margin: 0;">Cobertura Prevista (7 Días)</h2>
+                                <button class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem;" onclick="openModal('chart-expansion-modal')"><i class="fa-solid fa-expand"></i> Ampliar</button>
+                            </div>
+                            <div class="interactive-chart-container" style="flex-grow: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; height: 180px; padding-top: 1rem; cursor: pointer;" onclick="openModal('chart-expansion-modal')">
+                                <div class="chart-bar success hover-scale" style="height: 100%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Lunes: 100% Efectivos"></div>
+                                <div class="chart-bar success hover-scale" style="height: 95%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Martes: 95% Efectivos"></div>
+                                <div class="chart-bar success hover-scale" style="height: 98%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Miércoles: 98% Efectivos"></div>
+                                <div class="chart-bar warning hover-scale" style="height: 70%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Jueves: 70% Efectivos"></div>
+                                <div class="chart-bar success hover-scale" style="height: 100%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Viernes: 100% Efectivos"></div>
+                                <div class="chart-bar danger pulse hover-scale" style="height: 40%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Sábado: 40% (ALERTA CRÍTICA)"></div>
+                                <div class="chart-bar success hover-scale" style="height: 90%; width: 100%; border-radius: 6px 6px 0 0;" data-tooltip="Domingo: 90% Efectivos"></div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-weight: 600; color: var(--text-muted); font-size: 0.85rem;">
+                                <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span class="text-danger pulse">S</span><span>D</span>
+                            </div>
+                        </div>
+
+                        <!-- Panel Derecho: Acciones y Estado muy limpio -->
+                        <div class="widget">
+                            <h2 class="widget-title">Estado de Zonas</h2>
+                            <div class="city-status" id="city-status-list" style="margin-bottom: 2rem;">
+                                <!-- Generado dinámicamente -->
+                            </div>
+                            
+                            <h2 class="widget-title">Acciones Rápidas</h2>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <button class="btn btn-outline" style="justify-content: flex-start;" onclick="auditPayroll()"><i class="fa-solid fa-file-invoice-dollar" style="color: var(--primary);"></i> Auditar Nóminas</button>
+                                <button class="btn btn-outline" style="justify-content: flex-start;" onclick="openModal('vacation-modal')"><i class="fa-solid fa-umbrella-beach" style="color: var(--warning);"></i> Aprobar Vacaciones</button>
+                                <button class="btn btn-outline" style="justify-content: flex-start;" onclick="openModal('prediction-modal')"><i class="fa-solid fa-brain" style="color: var(--info);"></i> Actualizar Datos</button>
+                                <button class="btn btn-outline" style="justify-content: flex-start;" onclick="openModal('sync-modal')"><i class="fa-solid fa-cloud-arrow-up" style="color: var(--success);"></i> Sincronizar Ministerio</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vista: Cuadrantes -->
+                <div class="view" id="view-cuadrantes">
+                    <div class="card">
+                        <div class="card-header" style="flex-direction: column; align-items: flex-start; gap: 1rem;">
+                            <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                <h2 class="card-title">Planificación Masiva (<span id="cuadrantes-count">0</span> efectivos)</h2>
+                                <select class="custom-select" id="dept-filter-cal" style="width: auto; padding: 0.5rem 1rem;">
+                                    <option value="all">Todos los Cuerpos</option>
+                                    <option value="Policía Local">Policía Local</option>
+                                    <option value="Bomberos">Bomberos</option>
+                                    <option value="Protección Civil">Protección Civil</option>
+                                </select>
+                            </div>
+                            <div class="leyenda-cuadrante">
+                                <strong>Leyenda Operativa:</strong>
+                                <div class="leyenda-item"><span class="shift morning">M</span> Mañana</div>
+                                <div class="leyenda-item"><span class="shift afternoon">T</span> Tarde</div>
+                                <div class="leyenda-item"><span class="shift night">N</span> Noche</div>
+                                <div class="leyenda-item"><span class="shift rest">L</span> Libre / Descanso Legal</div>
+                                <div class="leyenda-item clickable-legend" onclick="switchView('alertas')"><span class="shift alert">!</span> Riesgo de Cobertura (Clic para Resolver)</div>
+                            </div>
+                        </div>
+                        <div class="calendar-container">
+                            <table class="table calendar-table">
+                                <thead>
+                                    <tr>
+                                        <th>Agente / Cuerpo</th>
+                                        <th>Lun 15</th>
+                                        <th>Mar 16</th>
+                                        <th>Mié 17</th>
+                                        <th>Jue 18</th>
+                                        <th>Vie 19</th>
+                                        <th>Sáb 20</th>
+                                        <th>Dom 21</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendar-body">
+                                    <!-- Generado dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vista: Alertas -->
+                <div class="view" id="view-alertas">
+                    <div class="alert-cards" id="alerts-container">
+                        <!-- Generado dinámicamente -->
+                    </div>
+                </div>
+
+                <!-- Vista: Agentes -->
+                <div class="view" id="view-agentes">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Directorio (<span id="agents-count">0</span> efectivos)</h2>
+                            <div style="display: flex; gap: 1rem; flex-grow: 1; max-width: 600px;">
+                                <select class="custom-select" id="dept-filter-agents" style="width: 200px;">
+                                    <option value="all">Todos los Cuerpos</option>
+                                    <option value="Policía Local">Policía Local</option>
+                                    <option value="Bomberos">Bomberos</option>
+                                    <option value="Protección Civil">Protección Civil</option>
+                                </select>
+                                <input type="text" class="search-input input-lg" placeholder="Buscar..." onkeyup="filterAgentsText(this.value)" style="flex-grow: 1;">
+                            </div>
+                        </div>
+                        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+                            <table class="table hover-table">
+                                <thead style="position: sticky; top: 0; background: white; z-index: 1;">
+                                    <tr><th>ID</th><th>Cuerpo</th><th>Rango</th><th>Horas</th><th>Estado</th><th>Conciliación</th><th>Acción</th></tr>
+                                </thead>
+                                <tbody id="agents-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- TOUR OVERLAY Y CAJA -->
+    <div id="tour-overlay" class="tour-overlay" onclick="nextTourStep()"></div>
+    <div id="tour-box" class="tour-box">
+        <h3 id="tour-title">Bienvenido</h3>
+        <p id="tour-desc">Descripción...</p>
+        <p style="font-size: 0.8rem; color: var(--primary); font-weight: 600; margin-bottom: 1rem;"><i class="fa-solid fa-computer-mouse"></i> Haz clic en cualquier lado para avanzar</p>
+        <div class="tour-nav">
+            <span id="tour-step-count">Paso 1 de X</span>
+            <button class="btn btn-outline" style="padding: 0.5rem 1rem; border:none; margin-left: auto;" onclick="endTour()">Saltar Tour</button>
+        </div>
+    </div>
+
+    <!-- ================= MODALES DE DETALLE KPI ================= -->
+    <div id="kpi-cobertura-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Análisis de Cobertura Total (98%)</h2>
+                <button class="close-btn" onclick="closeModal('kpi-cobertura-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-grid">
+                    <div class="profile-stat"><div class="profile-stat-val text-success">3,450</div><div class="profile-stat-label">Quendas Planificadas (Mes)</div></div>
+                    <div class="profile-stat"><div class="profile-stat-val text-success">3,381</div><div class="profile-stat-label">Quendas Cubiertas</div></div>
+                    <div class="profile-stat"><div class="profile-stat-val text-danger">69</div><div class="profile-stat-label">Quendas en Riesgo (2%)</div></div>
+                    <div class="profile-stat"><div class="profile-stat-val text-info">99.8%</div><div class="profile-stat-label">Fiabilidad Predictiva AI</div></div>
+                </div>
+                <h3 style="margin-bottom: 1rem;">Causas Raíz de la Falta de Cobertura (2%)</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 1rem; border-bottom: 1px solid var(--border);"><strong><i class="fa-solid fa-virus-covid text-danger"></i> Bajas Médicas (65%):</strong> 45 turnos afectados por 8 agentes en Incapacidad Temporal. <span style="color: var(--primary); cursor: pointer;" onclick="openModal('nueva-quenda-modal')">Auto-cubrir con retenes</span></li>
+                    <li style="padding: 1rem; border-bottom: 1px solid var(--border);"><strong><i class="fa-solid fa-umbrella-beach text-warning"></i> Solapamiento Vacacional (25%):</strong> 17 turnos afectados por mala praxis histórica. <span style="color: var(--primary); cursor: pointer;" onclick="openModal('vacation-modal')">Re-evaluar vacaciones</span></li>
+                    <li style="padding: 1rem;"><strong><i class="fa-solid fa-gavel text-info"></i> Descansos Obligatorios (10%):</strong> 7 turnos vacíos al forzar el descanso de 14h obligatorio. <span style="color: var(--primary);">Solucionado por SmartQuenda AI</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="chart-expansion-modal" class="modal">
+        <div class="modal-content" style="max-width: 900px; width: 90%;">
+            <div class="modal-header">
+                <h2>Cobertura Prevista (7 Días)</h2>
+                <button class="close-btn" onclick="closeModal('chart-expansion-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">Aquí puedes ver si va a faltar personal algún día de la semana. Pulsa sobre el día en rojo para que el sistema lo arregle automáticamente.</p>
+                <div style="display: flex; height: 350px; align-items: flex-end; gap: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; cursor: pointer;">
+                    <div class="chart-bar success hover-scale" style="height: 100%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Lunes: Cobertura total"></div>
+                    <div class="chart-bar success hover-scale" style="height: 95%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Martes: 2 bajas cubiertas"></div>
+                    <div class="chart-bar success hover-scale" style="height: 98%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Miércoles: Todo correcto"></div>
+                    <div class="chart-bar warning hover-scale" style="height: 70%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Jueves: Atención, menos personal del habitual"></div>
+                    <div class="chart-bar success hover-scale" style="height: 100%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Viernes: Todo correcto"></div>
+                    <div class="chart-bar danger pulse hover-scale" style="height: 40%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Sábado: FALTAN EFECTIVOS. Haz clic aquí para resolver" onclick="closeModal('chart-expansion-modal'); switchView('alertas');"></div>
+                    <div class="chart-bar success hover-scale" style="height: 90%; flex: 1; border-radius: 6px 6px 0 0;" data-tooltip="Domingo: Todo correcto"></div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 0.5rem; text-align: center; font-weight: bold; color: var(--text-muted);">
+                    <div style="flex: 1;">LUN</div>
+                    <div style="flex: 1;">MAR</div>
+                    <div style="flex: 1;">MIÉ</div>
+                    <div style="flex: 1;">JUE</div>
+                    <div style="flex: 1;">VIE</div>
+                    <div style="flex: 1; color: var(--danger);" class="pulse">SÁB</div>
+                    <div style="flex: 1;">DOM</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="sector-detail-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Auditoría de Sector: <span id="sector-detail-title">Sector</span></h2>
+                <button class="close-btn" onclick="closeModal('sector-detail-modal')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body" id="sector-detail-body"></div>
+        </div>
+    </div>
+
+    <!-- Modales de Funcionalidad -->
+    <div id="nueva-quenda-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h2>Programar Nueva Quenda</h2><button class="close-btn" onclick="closeModal('nueva-quenda-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <form id="quenda-form" onsubmit="submitQuenda(event)">
+                    <div class="form-group">
+                        <label>Cuerpo Operativo</label>
+                        <select class="custom-select" id="new-q-dept" required><option value="Policía Local">Policía Local</option><option value="Bomberos">Bomberos</option></select>
+                    </div>
+                    <div class="form-group"><label>Fecha</label><input type="date" class="input-lg" required></div>
+                    <div class="form-group">
+                        <label>Turno</label>
+                        <select class="custom-select" id="new-q-turn" required><option value="morning">Mañana</option><option value="afternoon">Tarde</option><option value="night">Noche</option></select>
+                    </div>
+                    <div class="form-actions"><button type="submit" class="btn btn-primary">Asignar con IA</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="vacation-modal" class="modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header"><h2>Gestor Inteligente de Vacaciones</h2><button class="close-btn" onclick="closeModal('vacation-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <div id="vacation-requests">
+                    <div class="vacation-card" id="vac-1">
+                        <div class="vacation-info"><strong>L. Vázquez (Bomberos)</strong><br><span class="text-muted">10 Ago - 25 Ago (15 días)</span></div>
+                        <div class="vacation-status warning"><i class="fa-solid fa-triangle-exclamation"></i> Riesgo Cobertura</div>
+                    </div>
+                    <div class="vacation-card" id="vac-2">
+                        <div class="vacation-info"><strong>R. Fernández (Policía Local)</strong><br><span class="text-muted">01 Sep - 15 Sep (15 días)</span></div>
+                        <div class="vacation-status success"><i class="fa-solid fa-check"></i> Óptimo</div>
+                    </div>
+                    <div class="vacation-card" id="vac-3">
+                        <div class="vacation-info"><strong>E. Blanco (Policía Local)</strong><br><span class="text-muted">10 Ago - 25 Ago (15 días)</span></div>
+                        <div class="vacation-status danger"><i class="fa-solid fa-xmark"></i> Solape Ilegal</div>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="processVacations()">Procesar con IA</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="prediction-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px; text-align: center;">
+            <div class="modal-body" style="padding: 3rem;">
+                <div id="prediction-loader">
+                    <i class="fa-solid fa-brain" style="font-size: 4rem; color: var(--primary); animation: pulse 1s infinite; margin-bottom: 1.5rem;"></i>
+                    <h2>Entrenando Modelos</h2>
+                    <div class="progress-bar" style="margin-top: 2rem; height: 8px;"><div class="progress" id="pred-progress" style="width: 0%; transition: width 0.5s;"></div></div>
+                </div>
+                <div id="prediction-result" style="display: none;">
+                    <i class="fa-solid fa-check-circle" style="font-size: 4rem; color: var(--success); margin-bottom: 1.5rem;"></i>
+                    <h2>Modelos Actualizados</h2>
+                    <button class="btn btn-primary" style="margin: 2rem auto 0;" onclick="closeModal('prediction-modal')">Aceptar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sync-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header"><h2>Conexión B2G</h2><button class="close-btn" onclick="closeModal('sync-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <div class="terminal-box" id="terminal-output">> Iniciando protocolo SSL...<br></div>
+                <button class="btn btn-success" id="btn-sync-close" style="width: 100%; margin-top: 1rem; display: none;" onclick="closeModal('sync-modal')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="agent-profile-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header"><h2>Expediente Operativo</h2><button class="close-btn" onclick="closeModal('agent-profile-modal')"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body" id="agent-profile-content"></div>
+        </div>
+    </div>
+
+    <!-- Notificación emergente sencilla (Toast) -->
+    <div id="toast-notification" style="position: fixed; bottom: 2rem; right: 2rem; background: var(--text-main); color: white; padding: 1rem 2rem; border-radius: 8px; z-index: 10000; font-weight: 600; display: flex; align-items: center; gap: 1rem; transform: translateY(150%); transition: transform 0.3s;">
+        <i class="fa-solid fa-circle-check" style="color: var(--success); font-size: 1.25rem;"></i>
+        <span id="toast-message">Acción completada</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
